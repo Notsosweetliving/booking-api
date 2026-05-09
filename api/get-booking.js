@@ -1,11 +1,11 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   const { ref } = req.query;
 
   if (!ref) {
     return res.status(400).json({ error: "Missing booking reference" });
   }
 
-  const SHOP = "your-store-name.myshopify.com";
+  const SHOP = "blue-atlas-air.myshopify.com";
   const TOKEN = process.env.SHOPIFY_TOKEN;
 
   try {
