@@ -43,7 +43,8 @@ module.exports = async function handler(req, res) {
 
     res.status(200).json(match);
 
- catch (err) {
+} catch (err) {
+  console.error("REAL ERROR:", err);
   res.status(500).json({ error: "Server error" });
 }
 } 
