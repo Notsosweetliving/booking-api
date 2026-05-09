@@ -21,10 +21,13 @@ export default async function handler(req, res) {
     const orders = data.orders || [];
 
     const match = orders.find(order =>
-      order.line_items.some(item =>
-        item.properties?.some(p => p.name === "Booking" && p.value === ref)
-      )
-    );
+  order.line_items.some(item =>
+    (item.properties || []).some(p =>
+      p.name && p.name.toLowerCase() === "booking" &&
+      p.value && p.value.trim() === ref.trim()
+    )
+  )
+);
 
     if (!match) {
       return res.status(404).json({ error: "Booking not found" });
