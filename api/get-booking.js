@@ -26,13 +26,21 @@ module.exports = async function handler(req, res) {
   });
 });
 
-    const orders = data.orders || [];
+ const orders = data.orders || [];
 
-    const match = orders.find(order =>
+// ✅ NORMALIZE FUNCTION (ADD HERE)
+const normalize = (str) =>
+  (str || "")
+    .toString()
+    .replace(/\s+/g, "")   // remove ALL whitespace
+    .toUpperCase();
+
+// ✅ NEW MATCH LOGIC (REPLACE OLD ONE)
+const match = orders.find(order =>
   order.line_items.some(item =>
     (item.properties || []).some(p =>
-      (p.name || "").toLowerCase().trim() === "booking" &&
-      (p.value || "").toUpperCase().trim() === ref.toUpperCase().trim()
+      normalize(p.name) === "BOOKING" &&
+      normalize(p.value) === normalize(ref)
     )
   )
 );
