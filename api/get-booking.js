@@ -41,7 +41,37 @@ module.exports = async function handler(req, res) {
       return res.status(404).json({ error: "Booking not found" });
     }
 
-    res.status(200).json(match);
+    if (!match) {
+  return res.status(404).json({ error: "Booking not found" });
+}
+
+// 🔥 BUILD CLEAN BOOKING OBJECT
+const passengers = [];
+
+match.line_items.forEach(item => {
+  const props = item.properties || [];
+
+  const get = (name) =>
+    props.find(p => p.name === name)?.value?.trim();
+
+  if (get("Passenger")) {
+    passengers.push({
+      name: get("Name"),
+      passport: get("Passport"),
+      seat: get("Seat"),
+      class: get("Class"),
+      baggage: get("Baggage"),
+      meal: get("Meal")
+    });
+  }
+});
+
+// ✅ RETURN CLEAN DATA
+res.status(200).json({
+  bookingRef: ref,
+  flight: match.line_items.find(i => i.title)?.title,
+  passengers
+});
 
 } catch (err) {
   console.error("REAL ERROR:", err);
