@@ -62,7 +62,7 @@ match.line_items.forEach(item => {
   const get = (name) =>
     props.find(p => p.name === name)?.value?.trim();
 
-  if (get("Passenger")) {
+  if (get("Name")) {
     passengers.push({
       name: get("Name"),
       passport: get("Passport"),
