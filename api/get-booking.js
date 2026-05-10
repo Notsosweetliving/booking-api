@@ -1,4 +1,5 @@
 module.exports = async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   const { ref } = req.query;
 
   if (!ref) {
