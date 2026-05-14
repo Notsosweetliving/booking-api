@@ -6,10 +6,6 @@ if (!ref) {
   return res.status(400).json({ error: "Missing booking reference" });
 }
 
-if (!email) {
-  return res.status(400).json({ error: "Missing email address" });
-}
-
   const SHOP = "blue-atlas-air.myshopify.com";
   const TOKEN = process.env.SHOPIFY_TOKEN;
 
@@ -54,13 +50,15 @@ const match = orders.find(order =>
       return res.status(404).json({ error: "Booking not found" });
     }
 
-    const normalizeEmail = (str) =>
-  (str || "").toString().trim().toLowerCase();
+   if (email) {
+  const normalizeEmail = (str) =>
+    (str || "").toString().trim().toLowerCase();
 
-const orderEmail = normalizeEmail(match.email || match.contact_email);
+  const orderEmail = normalizeEmail(match.email || match.contact_email);
 
-if (orderEmail !== normalizeEmail(email)) {
-  return res.status(403).json({ error: "Email does not match booking" });
+  if (orderEmail !== normalizeEmail(email)) {
+    return res.status(403).json({ error: "Email does not match booking" });
+  }
 }
 
 // 🔥 BUILD CLEAN BOOKING OBJECT
