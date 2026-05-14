@@ -79,6 +79,14 @@ match.line_items.forEach(item => {
 res.status(200).json({
   bookingRef: ref,
   flight: match.line_items.find(i => i.title)?.title,
+
+  // ✈️ ADD THESE (for dynamic UI)
+  from: "LHR",
+  to: "DXB",
+  departure: "08:45 PM",
+  gate: "A12",
+  boarding: "09:30",
+
   passengers
 });
 
