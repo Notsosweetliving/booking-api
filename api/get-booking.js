@@ -64,14 +64,22 @@ match.line_items.forEach(item => {
     props.find(p => p.name === name)?.value?.trim();
 
   if (get("Name")) {
-    passengers.push({
-      name: get("Name"),
-      passport: get("Passport"),
-      seat: get("Seat"),
-      class: get("Class"),
-      baggage: get("Baggage"),
-      meal: get("Meal")
-    });
+   passengers.push({
+  name: get("Name"),
+  passport: get("Passport"),
+  seat: get("Seat"),
+  class: get("Class"),
+  baggage: get("Baggage"),
+  meal: get("Meal"),
+
+  flight: get("Flight"),
+  from: get("From"),
+  to: get("To"),
+  departure: get("Departure"),
+  arrival: get("Arrival"),
+  boarding: get("Boarding"),
+  gate: get("Gate")
+}); 
   }
 });
 
