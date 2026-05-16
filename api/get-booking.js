@@ -71,7 +71,7 @@ match.line_items.forEach(item => {
     props.find(p => p.name === name)?.value?.trim();
 
   if (get("Name")) {
-   passengers.push({
+  passengers.push({
   name: get("Name"),
   passport: get("Passport"),
   seat: get("Seat"),
@@ -85,10 +85,47 @@ match.line_items.forEach(item => {
   departure: get("Departure"),
   arrival: get("Arrival"),
   boarding: get("Boarding"),
-  gate: get("Gate")
+  gate: get("Gate"),
+
+  checkedIn: false,
+  boardingGroup: null,
+  sequenceNumber: null
 }); 
   }
 });
+
+  // ✅ Add check-in data from Supabase
+try {
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  const checkinRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/checkins?booking_ref=eq.${encodeURIComponent(ref)}&select=*`,
+    {
+      headers: {
+        apikey: SUPABASE_SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+      }
+    }
+  );
+
+  const checkins = await checkinRes.json();
+
+  passengers.forEach(p => {
+    const matchCheckin = checkins.find(c =>
+      (c.passenger_name || "").trim().toLowerCase() === (p.name || "").trim().toLowerCase()
+    );
+
+    if (matchCheckin) {
+      p.checkedIn = true;
+      p.boardingGroup = matchCheckin.boarding_group;
+      p.sequenceNumber = matchCheckin.sequence_number;
+    }
+  });
+
+} catch (err) {
+  console.error("CHECKIN LOOKUP ERROR:", err);
+}  
 
 // ✅ RETURN CLEAN DATA
 res.status(200).json({
